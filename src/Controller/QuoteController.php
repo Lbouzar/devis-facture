@@ -5,6 +5,7 @@ use App\Entity\Quote;
 use App\Form\QuoteType;
 use App\Repository\QuoteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,15 +20,15 @@ class QuoteController extends AbstractController
             'quotes' => $quoteRepository->findAll(),
         ]);
     }
-    #[Route('/', name:'quote_new', methods: ['GET','POST'])]
-    public function new(Request $request): Response
+    #[Route('/new', name:'quote_new', methods: ['GET','POST'])]
+    public function new(Request $request, PersistenceManagerRegistry $doctrine): Response
     {
         $quote = new Quote();
         $form = $this->createForm(QuoteType::class,$quote);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($quote);
             $entityManager->flush();
 
@@ -41,9 +42,31 @@ class QuoteController extends AbstractController
     }
     #[Route('/{id}',name:'quote_show',methods:['GET'])]
     public function show(Quote $quote): Response 
-    {
+    {   
         return $this->render('quote/show.html.twig',[
             'quote'=>$quote,
+        ]);
+    }
+    #[Route('/{id}/status', name:'quote_status', methods:['GET','POST'])]
+    public function status(Request $request, Quote $quote,PersistenceManagerRegistry $doctrine): Response 
+    { 
+        $entityManager = $doctrine->getManager();
+        $form = $this->createForm(QuoteType::class, $quote);
+        $form->handleRequest($request);
+    
+       
+          
+                $quote->setAccepted(true);
+                $entityManager->persist($quote);
+                $entityManager->flush();
+                $this->addFlash('success', 'Quote updated successfully.');
+               
+            
+        
+    
+        return $this->render('quote/show.html.twig', [
+            'form' => $form->createView(),
+            'quote' => $quote 
         ]);
     }
     #[Route('/{id}/edit', name:'quote_edit', methods:['GET','POST'])]
@@ -73,5 +96,6 @@ class QuoteController extends AbstractController
     }
     return $this->redirectToRoute('quote_index');
    }
+   
 
 }

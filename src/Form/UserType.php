@@ -1,53 +1,32 @@
-<?php
+<?php 
 
 namespace App\Form;
 
-use App\Entity\Customer;
 use App\Entity\User;
 use App\Entity\UserRole;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('login', EmailType::class,[
-                'label' => 'Email Address',
-                'constraints' => [
-                    new Email ([
-                        'message' => "Veuillez entrer une adresse email valide"
-                    ]),
-                    new NotBlank([
-                        'message' => "Ce champs ne peut être laissé vide"
-                    ])
-                ]
-            ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options' => ['label'=>'Password'],
-                'second_options' => ['label' => 'Repeat Password']
-            ])
+            ->add('login')
+            ->add('password', PasswordType::class)
             ->add('role', EntityType::class, [
                 'class' => UserRole::class,
                 'choice_label' => 'name',
+                'placeholder' => 'Choose a role',
             ])
-            ->add('customer', EntityType::class, [
-                'class' => Customer::class,
-                'choice_label' => 'name',
-            ])
-        ;
+            ->add('submit', SubmitType::class, ['label' => 'Create User']);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => User::class,

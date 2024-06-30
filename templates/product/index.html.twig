@@ -1,0 +1,15 @@
+
+
+{% block title %}AAAAAAAAAAAAAAAAAAAA!{% endblock %}
+
+{% block body %}
+<h1>Product index</h1>
+<ul>
+    {% for product in products %}
+        <li>{{ product.id}}</li>
+        <li>{{ product.name}}</li>
+        <li>{{ product.description}}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

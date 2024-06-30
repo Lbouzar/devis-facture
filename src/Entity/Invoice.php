@@ -41,6 +41,13 @@ class Invoice
     #[ORM\OneToOne(mappedBy: 'invoice', cascade: ['persist', 'remove'])]
     private ?Client $client = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $invoice_number = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Quote $quote_number = null;
+
     public function __construct()
     {
         $this->invoiceItems = new ArrayCollection();
@@ -89,7 +96,7 @@ class Invoice
     }
 
 
-    public function getTotalAmount(): ?string
+    public function getTotalAmount(): string
     {
         return $this->total_amount;
     }
@@ -162,6 +169,30 @@ class Invoice
         }
 
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getInvoiceNumber(): ?string
+    {
+        return $this->invoice_number;
+    }
+
+    public function setInvoiceNumber(string $invoice_number): static
+    {
+        $this->invoice_number = $invoice_number;
+
+        return $this;
+    }
+
+    public function getQuoteNumber(): ?Quote
+    {
+        return $this->quote_number;
+    }
+
+    public function setQuoteNumber(Quote $quote_number): static
+    {
+        $this->quote_number = $quote_number;
 
         return $this;
     }

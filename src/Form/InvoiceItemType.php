@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\DecimalType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class InvoiceItemType extends AbstractType
@@ -27,11 +27,11 @@ class InvoiceItemType extends AbstractType
                 'attr' => ['min' => 1],
                 'label' => 'Quantity'
             ])
-            ->add('price_unit', DecimalType::class, [
+            ->add('price_unit', NumberType::class, [
                 'scale' => 2,
                 'label' => 'Unit Price'
             ])
-            ->add('total_price', DecimalType::class, [
+            ->add('total_price', NumberType::class, [
                 'scale' => 2,
                 'label' => 'Total Price'
             ])

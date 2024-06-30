@@ -3,11 +3,14 @@
 namespace App\Controller;
 use App\Entity\Invoice;
 use App\Form\InvoiceType;
+use App\Entity\Client;
 use App\Repository\InvoiceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
+
 
 #[Route('/invoice')]
 class InvoiceController extends AbstractController
@@ -19,15 +22,15 @@ class InvoiceController extends AbstractController
             'invoices' => $invoiceRepository->findAll(),
         ]);
     }
-    #[Route('/', name:'invoice_new', methods: ['GET','POST'])]
-    public function new(Request $request): Response
+    #[Route('/new', name:'invoice_new', methods: ['GET','POST'])]
+    public function new(Request $request, PersistenceManagerRegistry $doctrine): Response
     {
         $invoice = new Invoice();
         $form = $this->createForm(InvoiceType::class,$invoice);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($invoice);
             $entityManager->flush();
 

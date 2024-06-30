@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New User{% endblock %}
+
+{% block body %}
+<h1>Create New User</h1>
+
+{{ form_start(form) }}
+    {{ form_row(form.login) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.role) }}
+    {{ form_row(form.submit, {'label': 'Create User'}) }}
+{{ form_end(form) }}
+
+<a href="{{ path('app_user') }}">Back to list</a>
+{% endblock %}

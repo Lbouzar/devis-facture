@@ -7,6 +7,7 @@ use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/product')]
@@ -19,15 +20,15 @@ class ProductController extends AbstractController
             'products' => $productRepository->findAll(),
         ]);
     }
-    #[Route('/', name:'product_new', methods: ['GET','POST'])]
-    public function new(Request $request): Response
+    #[Route('/new', name:'product_new', methods: ['GET','POST'])]
+    public function new(Request $request, PersistenceManagerRegistry $doctrine): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class,$product);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
 

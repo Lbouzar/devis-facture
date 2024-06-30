@@ -1,0 +1,42 @@
+
+
+{% block title %}Create New Invoice Item{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto p-5">
+    <h1 class="text-xl font-bold mb-4">New Invoice Item</h1>
+
+    {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+
+    <div>
+        <label for="invoice_product" class="block text-sm font-medium text-gray-700">Product</label>
+        {{ form_widget(form.product, {'attr': {'class': 'mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        {{ form_errors(form.product) }}
+    </div>
+
+    <div>
+        <label for="invoice_quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+        {{ form_widget(form.quantity, {'attr': {'class': 'mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        {{ form_errors(form.quantity) }}
+    </div>
+
+    <div>
+        <label for="invoice_price_unit" class="block text-sm font-medium text-gray-700">Price unit</label>
+        {{ form_widget(form.price_unit, {'attr': {'class': 'mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        {{ form_errors(form.price_unit) }}
+    </div>
+
+    <div>
+        <label for="invoice_total_price" class="block text-sm font-medium text-gray-700">Total price</label>
+        {{ form_widget(form.total_price, {'attr': {'class': 'mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        {{ form_errors(form.total_price) }}
+    </div>
+
+
+    <div class="flex justify-end mt-4">
+        {{ form_widget(form.save, {'attr': {'class': 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'}}) }}
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

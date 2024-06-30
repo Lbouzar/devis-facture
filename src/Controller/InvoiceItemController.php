@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
 
 #[Route('/invoice-item')]
 class InvoiceItemController extends AbstractController
@@ -15,27 +16,27 @@ class InvoiceItemController extends AbstractController
     #[Route('/', name:'invoice_item_index',methods:['GET'])]
     public function index(InvoiceItemRepository $invoiceItemRepository): Response 
     {
-        return $this->render('invoice_item/index.html.twig',[
+        return $this->render('invoice-item/index.html.twig',[
             'invoice_items'=>$invoiceItemRepository->findAll(),
         ]);
     }
 
-    #[Route('/add',name:'invoice_item_add', methods: ['GET','POST'])]
-    public function add(Request $request): Response 
+    #[Route('/new',name:'invoice_item_add', methods: ['GET','POST'])]
+    public function add(Request $request , PersistenceManagerRegistry $doctrine): Response 
     {
         $invoiceItem = new InvoiceItem();
         $form = $this->createForm(InvoiceItemType::class,$invoiceItem);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($invoiceItem);
             $entityManager->flush(); 
 
             return $this->redirectToRoute('invoice_item_index');
         }
 
-        return $this->render('invoice_item/add.html.twig',[
+        return $this->render('invoice-item/new.html.twig',[
             'invoice_item'=> $invoiceItem,
             'form'=> $form->createView(),
         ]);
@@ -48,13 +49,13 @@ class InvoiceItemController extends AbstractController
         ]);
     }
     #[Route('/{id}/edit',name:'invoice_item_edit',methods:['GET','POST'])]
-    public function edit(Request $request, InvoiceItem $invoiceItem): Response
+    public function edit(Request $request, InvoiceItem $invoiceItem,   PersistenceManagerRegistry $doctrine): Response
     {
         $form = $this->createForm(InvoiceItemType::class, $invoiceItem);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $this->getDoctrine()->getManager()->flush();
+            $this->$doctrine->getManager()->flush();
 
             return $this->redirectToRoute('invoice_item_index');
         }

@@ -1,0 +1,18 @@
+
+
+{% block title %}Quote{% endblock %}
+
+{% block body %}
+<h1>Quote</h1>
+<ul>
+    <li>{{ quote.customer.name }}</li>
+    <li>{{ quote.quoteNumber }}</li> 
+    <li>{{ quote.quoteDate|date("m/d/Y") }}</li> 
+    <li>{{ quote.totalAmount }}</li>
+</ul>
+<a href="{{ path('quote_status', {'id': quote.id}) }}" class="button">Toggle Accepted</a>
+
+
+
+
+{% endblock %}

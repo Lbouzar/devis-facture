@@ -1,0 +1,15 @@
+
+
+{% block title %}Customers!{% endblock %}
+
+{% block body %}
+<h1>Customers</h1>
+<ul>
+    {% for customer in customers %}
+        <li>{{ customer.id }}</li>
+        <li>{{ customer.name }}</li>
+        <li>{{ customer.email }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+
+
+{% block title %}AAAAAAAAAAAAAAAAAAAA!{% endblock %}
+
+{% block body %}
+<h1>Items</h1>
+<ul>
+    {% for item in invoice_items %}
+        <li>{{ item.id}}</li>
+        <li>{{ item.invoiceNumber}}</li>
+        
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -15,6 +15,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            entry_point: 'App\Security\CustomerAuthAuthenticator' 
             lazy: true
             provider: app_user_provider
             form_login:
@@ -35,7 +36,6 @@ security:
 
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/customer, roles: ROLE_CUSTOMER }
         - { path: ^/accountant, roles: ROLE_ACCOUNTANT }
     role_hierarchy:
         ROLE_ADMIN: [ROLE_ACCOUNTANT, ROLE_CUSTOMER]

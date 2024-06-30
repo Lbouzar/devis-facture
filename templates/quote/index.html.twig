@@ -1,0 +1,13 @@
+
+{% block title %}Quote!{% endblock %}
+
+{% block body %}
+<h1>Quotes</h1>
+<ul>
+    {% for quote in quotes %}
+        <li>{{ quote.id }}</li>
+        <li>{{ quote.totalAmount }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Quote{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto p-5">
+    <h1 class="text-xl font-bold mb-4">New Quote</h1>
+
+    {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+
+    <div>
+        <label for="quote_customer" class="block text-sm font-medium text-gray-700">Customer</label>
+        {{ form_widget(form.customer, {'attr': {'class': 'mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        {{ form_errors(form.customer) }}
+    </div>
+
+     <div>
+        <label for="quote_client" class="block text-sm font-medium text-gray-700">Client</label>
+        {{ form_widget(form.client, {'attr': {'class': 'mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        {{ form_errors(form.client) }}
+    </div>
+      <div>
+        <label for="quote_number" class="block text-sm font-medium text-gray-700">Quote Number</label>
+        {{ form_widget(form.quote_number, {'attr': {'class': 'mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        {{ form_errors(form.quote_number) }}
+    </div>
+
+    <div>
+        <label for="quote_quote_date" class="block text-sm font-medium text-gray-700">Quote Date</label>
+        {{ form_widget(form.quote_date, {'attr': {'class': 'mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        {{ form_errors(form.quote_date) }}
+    </div>
+
+    <div>
+        <label for="quote_total_amount" class="block text-sm font-medium text-gray-700">Total Amount</label>
+        {{ form_widget(form.total_amount, {'attr': {'class': 'mt-1 block w-full p-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'}}) }}
+        {{ form_errors(form.total_amount) }}
+    </div>
+
+    <div>
+        <label class="block text-sm font-medium text-gray-700">Quote Items</label>
+        {{ form_widget(form.quoteItems, {'attr': {'class': 'space-y-2'}}) }}
+        {{ form_errors(form.quoteItems) }}
+    </div>
+
+    <div class="flex justify-end mt-4">
+        {{ form_widget(form.save, {'attr': {'class': 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'}}) }}
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}

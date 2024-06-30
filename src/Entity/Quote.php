@@ -35,6 +35,12 @@ class Quote
     #[ORM\OneToOne(mappedBy: 'quote', cascade: ['persist', 'remove'])]
     private ?Client $client = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $quote_number = null;
+
+    #[ORM\Column]
+    private ?bool $accepted = false;
+
     public function __construct()
     {
         $this->quoteItems = new ArrayCollection();
@@ -57,7 +63,7 @@ class Quote
         return $this;
     }
 
-    public function getTotalAmount(): ?string
+    public function getTotalAmount(): string
     {
         return $this->total_amount;
     }
@@ -122,6 +128,30 @@ class Quote
         }
 
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getQuoteNumber(): ?string
+    {
+        return $this->quote_number;
+    }
+
+    public function setQuoteNumber(string $quote_number): static
+    {
+        $this->quote_number = $quote_number;
+
+        return $this;
+    }
+
+    public function isAccepted(): ?bool
+    {
+        return $this->accepted;
+    }
+
+    public function setAccepted(bool $accepted): static
+    {
+        $this->accepted = $accepted;
 
         return $this;
     }
