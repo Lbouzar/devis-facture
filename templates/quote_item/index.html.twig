@@ -1,0 +1,12 @@
+{% block title %}Quote item!{% endblock %}
+
+{% block body %}
+<h1>Quotes item</h1>
+<ul>
+    {% for quote in quote_items %}
+        <li>{{ quote.id }}</li>
+        <li>{{ quote.product }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

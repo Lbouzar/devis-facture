@@ -9,6 +9,9 @@
         <li>{{ product.id}}</li>
         <li>{{ product.name}}</li>
         <li>{{ product.description}}</li>
+        <button>
+    <a href="{{ path('quote_item_new', {'productName': product.name}) }}" class="button">Create Quote</a>
+    </button>
     {% endfor %}
 </ul>
 

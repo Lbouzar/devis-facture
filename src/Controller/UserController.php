@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
 use App\Form\UserType;
 use Symfony\Component\Routing\Attribute\Route;
+use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
 use App\Service\UserService;
 
 class UserController extends AbstractController
@@ -20,15 +22,15 @@ class UserController extends AbstractController
     }
 
     #[Route('/user', name: 'app_user')]
-    public function index(): Response
+    public function index(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+            'users' => $userRepository->findAll(),
         ]);
     }
 
     #[Route('/user/create', name: 'user_create', methods: ['GET', 'POST'])]
-    public function createUser(Request $request): Response
+    public function createUser(Request $request, PersistenceManagerRegistry $doctrine): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -38,14 +40,14 @@ class UserController extends AbstractController
             $encodedPassword = $this->userService->encodePassword($user, $user->getPassword());
             $user->setPassword($encodedPassword);
     
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
     
-            if ($user->getRoles() && $user->getRoles()->getName() === 'customer') {
+            if ($user->getRoles() && $user->getRoles() === 'customer') {
                 $this->addFlash('success', 'Customer account created. Please complete your profile.');
                 return $this->redirectToRoute('customer_new', ['userId' => $user->getId()]);
-            } else if ($user->getRoles() && $user->getRoles()->getName() === 'accountant') {
+            } else if ($user->getRoles() && $user->getRoles() === 'accountant') {
                 $this->addFlash('success', 'Accountant account created. Welcome!');
                 return $this->redirectToRoute('home');
             }
@@ -61,9 +63,9 @@ class UserController extends AbstractController
     
 
     #[Route('/user/{id}', name: 'user_delete', methods: ['POST'])]
-    public function deleteUser(Request $request, User $user): Response
+    public function deleteUser(Request $request, User $user,PersistenceManagerRegistry $doctrine): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $doctrine->getManager();
         $entityManager->remove($user);
         $entityManager->flush();
 
@@ -72,7 +74,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/update/{id}', name: 'user_update', methods: ['GET', 'POST'])]
-    public function updateUser(Request $request, User $user): Response
+    public function updateUser(Request $request, User $user, PersistenceManagerRegistry $doctrine): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -82,7 +84,7 @@ class UserController extends AbstractController
                 $encodedPassword = $this->userService->encodePassword($user, $user->getPassword());
                 $user->setPassword($encodedPassword);
             }
-            $this->getDoctrine()->getManager()->flush();
+            $doctrine->getManager()->flush();
             $this->addFlash('success', 'Utilisateur modifié');
             return $this->redirectToRoute('app_user');
         }

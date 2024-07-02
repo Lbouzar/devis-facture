@@ -4,11 +4,13 @@ security:
         App\Entity\User:
             algorithm: 'auto' # Symfony will pick the best hash algorithm available
 
+
     providers:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: login
+                property: email
+        # used to reload user from session & other features (e.g. switch_user)
 
     firewalls:
         dev:

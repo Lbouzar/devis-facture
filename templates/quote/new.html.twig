@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %}
 
 {% block title %}Create New Quote{% endblock %}
 
@@ -49,4 +49,42 @@
 
     {{ form_end(form) }}
 </div>
+{% endblock %} #}
+{# templates/quote/new.html.twig #}
+{# templates/quote/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Create new Quote</h1>
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <ul id="quote-items-list" data-index="{{ form.quoteItems|length }}">
+        {% for item in form.quoteItems %}
+            <li>{{ form_row(item) }}</li>
+        {% endfor %}
+    </ul>
+    <button type="button" id="add-quote-item">Add Quote Item</button>
+    <button type="submit">Save</button>
+{{ form_end(form) }}
+
+<script>
+    document.getElementById('add-quote-item').addEventListener('click', function() {
+        const list = document.getElementById('quote-items-list');
+        const index = list.getAttribute('data-index');
+
+        // Get the prototype template and replace __name__ with the index
+        const newForm = list.getAttribute('data-prototype').replace(/__name__/g, index);
+
+        // Increment the index and update the attribute
+        list.setAttribute('data-index', parseInt(index) + 1);
+
+        // Create a new list item and add the form
+        const newLi = document.createElement('li');
+        newLi.innerHTML = newForm;
+        list.appendChild(newLi);
+    });
+</script>
 {% endblock %}
+
+

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240629000651 extends AbstractMigration
+final class Version20240630193907 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,17 +20,17 @@ final class Version20240629000651 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE invoice ADD quote_number_id INT NOT NULL');
-        $this->addSql('ALTER TABLE invoice ADD CONSTRAINT FK_90651744B743476A FOREIGN KEY (quote_number_id) REFERENCES quote (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_90651744B743476A ON invoice (quote_number_id)');
+        $this->addSql('ALTER TABLE quote_item ADD product_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE quote_item ADD CONSTRAINT FK_8DFC7A944584665A FOREIGN KEY (product_id) REFERENCES product (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('CREATE INDEX IDX_8DFC7A944584665A ON quote_item (product_id)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('ALTER TABLE invoice DROP CONSTRAINT FK_90651744B743476A');
-        $this->addSql('DROP INDEX UNIQ_90651744B743476A');
-        $this->addSql('ALTER TABLE invoice DROP quote_number_id');
+        $this->addSql('ALTER TABLE quote_item DROP CONSTRAINT FK_8DFC7A944584665A');
+        $this->addSql('DROP INDEX IDX_8DFC7A944584665A');
+        $this->addSql('ALTER TABLE quote_item DROP product_id');
     }
 }

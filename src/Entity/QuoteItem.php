@@ -20,12 +20,14 @@ class QuoteItem
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private  $unit_price = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $quote_version = null;
+
 
     #[ORM\ManyToOne(inversedBy: 'quoteItems')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Quote $quote = null;
+
+    #[ORM\ManyToOne(inversedBy: 'quoteItems')]
+    private ?Product $product = null;
 
     public function getId(): ?int
     {
@@ -55,19 +57,6 @@ class QuoteItem
 
         return $this;
     }
-
-    public function getQuoteVersion(): ?string
-    {
-        return $this->quote_version;
-    }
-
-    public function setQuoteVersion(string $quote_version): static
-    {
-        $this->quote_version = $quote_version;
-
-        return $this;
-    }
-
     public function getQuote(): ?Quote
     {
         return $this->quote;
@@ -76,6 +65,18 @@ class QuoteItem
     public function setQuote(?Quote $quote): static
     {
         $this->quote= $quote;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
 
         return $this;
     }

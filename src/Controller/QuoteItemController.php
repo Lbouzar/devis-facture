@@ -8,8 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
 
-#[Route('/quote-item')]
+
+#[Route('/quote_item')]
 class QuoteItemController extends AbstractController
 {
     #[Route('/', name:'quote_item_index',methods:['GET'])]
@@ -20,22 +22,24 @@ class QuoteItemController extends AbstractController
         ]);
     }
 
-    #[Route('/add',name:'quote_item_add', methods: ['GET','POST'])]
-    public function add(Request $request): Response 
+    #[Route('/{productName}/new',name:'quote_item_new', methods: ['GET','POST'])]
+    public function add(Request $request, String $productName, PersistenceManagerRegistry $doctrine): Response 
     {
         $quoteItem = new QuoteItem();
         $form = $this->createForm(QuoteItemType::class,$quoteItem);
+        $form->product = $productName;
+
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($quoteItem);
             $entityManager->flush(); 
 
             return $this->redirectToRoute('quote_item_index');
         }
 
-        return $this->render('quote_item/add.html.twig',[
+        return $this->render('quote_item/new.html.twig',[
             'quote_item'=> $quoteItem,
             'form'=> $form->createView(),
         ]);

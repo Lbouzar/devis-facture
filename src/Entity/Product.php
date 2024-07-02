@@ -31,10 +31,17 @@ class Product
     #[ORM\OneToMany(targetEntity:InvoiceItem::class, mappedBy: 'product')]
     private collection $invoiceItems;
 
+    /**
+     * @var Collection<int, QuoteItem>
+     */
+    #[ORM\OneToMany(targetEntity: QuoteItem::class, mappedBy: 'product')]
+    private Collection $quoteItems;
+
     public function __construct()
     {
         $this->productImages = new ArrayCollection();
         $this->invoiceItems = new arrayCollection();
+        $this->quoteItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,5 +120,35 @@ class Product
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, QuoteItem>
+     */
+    public function getQuoteItems(): Collection
+    {
+        return $this->quoteItems;
+    }
+
+    public function addQuoteItem(QuoteItem $quoteItem): static
+    {
+        if (!$this->quoteItems->contains($quoteItem)) {
+            $this->quoteItems->add($quoteItem);
+            $quoteItem->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuoteItem(QuoteItem $quoteItem): static
+    {
+        if ($this->quoteItems->removeElement($quoteItem)) {
+            // set the owning side to null (unless already changed)
+            if ($quoteItem->getProduct() === $this) {
+                $quoteItem->setProduct(null);
+            }
+        }
+
+        return $this;
     }
 }
